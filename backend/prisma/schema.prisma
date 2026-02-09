@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  Message   Message[]
+  User      User[]    @relation("UserConversations")
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  content        String
+  createdAt      DateTime     @default(now())
+  senderId       String
+  conversationId String
+  Conversation   Conversation @relation(fields: [conversationId], references: [id])
+  User           User         @relation(fields: [senderId], references: [id])
+}
+
+model User {
+  id           String         @id @default(uuid())
+  username     String         @unique
+  email        String         @unique
+  password     String
+  avatarUrl    String?
+  bio          String?
+  createdAt    DateTime       @default(now())
+  Message      Message[]
+  Conversation Conversation[] @relation("UserConversations")
+  posts        Post[]
+  comments     Comment[]
+  likes        Like[]
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  content   String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  comments Comment[]
+  likes    Like[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id])
+}
+
+model Like {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  postId String
+  post   Post   @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+}
