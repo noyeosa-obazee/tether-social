@@ -2,25 +2,30 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
-const { jwtStrategy } = require("./config/jwt");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
-passport.use("jwt", jwtStrategy);
+require("./config/passport")(passport);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok", message: "Server is running" });
 });
 
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/users", require("./routes/users"));
 app.use("/api/posts", require("./routes/posts"));
 app.use("/api/comments", require("./routes/comments"));
-app.use("/api/users", require("./routes/users"));
 app.use("/api/likes", require("./routes/likes"));
-// app.use("/api/messages", require("./routes/messages"));
+app.use("/api/conversations", require("./routes/conversations"));
+app.use("/api/messages", require("./routes/messages"));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

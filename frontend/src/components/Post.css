@@ -1,0 +1,158 @@
+.post-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.post-header {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.post-author {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.post-author .avatar-circle {
+  width: 40px;
+  height: 40px;
+}
+
+.author-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.post-date {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.post-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.post-content {
+  padding: 12px 16px;
+  line-height: 1.5;
+  color: #333;
+  word-break: break-word;
+}
+
+.post-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.post-edit {
+  padding: 12px 16px;
+}
+
+.edit-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 80px;
+  margin-bottom: 10px;
+}
+
+.edit-textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.post-actions-footer {
+  padding: 10px 16px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 20px;
+}
+
+.action-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 5px;
+  transition: color 0.3s;
+}
+
+.action-btn:hover {
+  color: #007bff;
+}
+
+.comments-section {
+  padding: 12px 16px;
+  border-top: 1px solid #f0f0f0;
+  background: #f9f9f9;
+}
+
+.new-comment {
+  margin-bottom: 15px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.new-comment form {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+
+.comment-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border-left: 2px solid #ddd;
+}
+
+.comment-author {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #333;
+  margin-bottom: 3px;
+}
+
+.comment-content {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}

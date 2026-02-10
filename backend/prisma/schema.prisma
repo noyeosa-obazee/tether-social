@@ -7,37 +7,40 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  avatarUrl String?
+  bio       String?
+  createdAt DateTime @default(now())
+
+  messages      Message[]
+  conversations Conversation[] @relation("UserConversations")
+  posts         Post[]
+  comments      Comment[]
+  likes         Like[]
+}
+
 model Conversation {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime
-  Message   Message[]
-  User      User[]    @relation("UserConversations")
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  participants User[]    @relation("UserConversations")
+  messages     Message[]
 }
 
 model Message {
-  id             String       @id @default(uuid())
-  content        String
-  createdAt      DateTime     @default(now())
-  senderId       String
-  conversationId String
-  Conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  User           User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
-}
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
 
-model User {
-  id           String         @id @default(uuid())
-  username     String         @unique
-  email        String         @unique
-  password     String
-  avatarUrl    String?
-  bio          String?
-  createdAt    DateTime       @default(now())
-  Message      Message[]
-  Conversation Conversation[] @relation("UserConversations")
-  posts        Post[]
-  comments     Comment[]
-  likes        Like[]
+  senderId String
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 }
 
 model Post {

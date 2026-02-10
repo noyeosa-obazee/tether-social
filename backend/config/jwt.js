@@ -1,42 +1,22 @@
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
-const { prisma } = require("./prisma");
+const jwt = require("jsonwebtoken");
 
 const jwtSecret =
   process.env.JWT_SECRET || "your-secret-key-change-in-production";
 
 const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: jwtSecret,
+  expiresIn: "7d",
 };
 
-const jwtStrategy = new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
+function generateToken(user) {
+  return jwt.sign({ id: user.id, email: user.email }, jwtSecret, jwtOptions);
+}
+
+function verifyToken(token) {
   try {
-    const userId = jwtPayload.id;
-
-    if (!userId) {
-      return done(null, false, { message: "Invalid token payload" });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        avatarUrl: true,
-        bio: true,
-      },
-    });
-
-    if (!user) {
-      return done(null, false, { message: "User not found" });
-    }
-
-    return done(null, user);
-  } catch (error) {
-    return done(error, false);
+    return jwt.verify(token, jwtSecret);
+  } catch (err) {
+    return null;
   }
-});
+}
 
-module.exports = { jwtStrategy, jwtSecret, jwtOptions };
+module.exports = { jwtSecret, jwtOptions, generateToken, verifyToken };

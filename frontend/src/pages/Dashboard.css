@@ -1,0 +1,125 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  background: #f5f5f5;
+  position: relative;
+}
+
+.sidebar-wrapper {
+  width: 300px;
+  background: white;
+  border-right: 1px solid #eee;
+  overflow-y: auto;
+  transition:
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 101;
+}
+
+.sidebar-wrapper.closed {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-wrapper.open {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  animation: fadeIn 0.3s ease;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+  overflow: hidden;
+  transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 769px) {
+  .sidebar-wrapper.closed {
+    width: 0;
+    border-right: none;
+  }
+
+  .sidebar-wrapper.open {
+    width: 300px;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .sidebar-wrapper {
+    width: 250px;
+  }
+
+  .sidebar-wrapper.closed {
+    width: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: row;
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Mobile Sidebar */
+  .sidebar-wrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 80vw;
+    max-width: 280px;
+    height: 100vh;
+    border-right: 1px solid #eee;
+    z-index: 101;
+  }
+
+  .sidebar-wrapper.closed {
+    transform: translateX(-100%);
+  }
+
+  .sidebar-wrapper.open {
+    transform: translateX(0);
+  }
+
+  /* Main content takes full width on mobile */
+  .main-content {
+    width: 100%;
+  }
+}
