@@ -58,7 +58,7 @@ const register = async (req, res) => {
     res.status(201).json({
       message: "User registered successfully",
       user,
-      token: "Bearer " + token,
+      token,
     });
   } catch (error) {
     console.error("Register error:", error);
@@ -106,7 +106,7 @@ const login = async (req, res) => {
         username: user.username,
         email: user.email,
       },
-      token: "Bearer " + token,
+      token,
     });
   } catch (error) {
     console.error("Login error:", error);

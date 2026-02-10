@@ -46,6 +46,9 @@ exports.createConversation = async (req, res) => {
 };
 
 exports.getMyConversations = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
   try {
     const conversations = await prisma.conversation.findMany({
       where: {

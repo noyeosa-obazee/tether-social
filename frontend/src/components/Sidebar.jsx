@@ -31,6 +31,8 @@ const Sidebar = ({
       const res = await api.get("/conversations");
       setConversations(res.data);
     } catch (err) {
+      console.error(err);
+
       toast.error("Failed to load chats");
     } finally {
       setLoading(false);
