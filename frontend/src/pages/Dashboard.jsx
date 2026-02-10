@@ -25,12 +25,10 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Sidebar Overlay (mobile) */}
       {isSidebarOpen && window.innerWidth <= 768 && (
         <div className="sidebar-overlay" onClick={closeSidebar}></div>
       )}
 
-      {/* Sidebar */}
       <div className={`sidebar-wrapper ${isSidebarOpen ? "open" : "closed"}`}>
         <Sidebar
           activeTab={activeTab}
@@ -42,7 +40,6 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* Main Content */}
       <div className="main-content">
         {activeTab === "feed" ? (
           <Feed onToggleSidebar={toggleSidebar} sidebarOpen={isSidebarOpen} />
@@ -56,7 +53,6 @@ const Dashboard = () => {
         )}
       </div>
 
-      {/* Profile Modal - At top level for full viewport centering */}
       {showProfileModal && (
         <EditProfileModal onClose={() => setShowProfileModal(false)} />
       )}

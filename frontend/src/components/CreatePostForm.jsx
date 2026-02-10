@@ -23,12 +23,13 @@ const CreatePostForm = ({ onPostCreated, onCancel }) => {
         content,
         imageUrl: imageUrl || null,
       });
-      toast.success("Post created!");
+      if (res.ok) toast.success("Post created!");
       onPostCreated(res.data);
       setContent("");
       setImageUrl("");
     } catch (err) {
       toast.error("Failed to create post");
+      console.error(err);
     } finally {
       setLoading(false);
     }

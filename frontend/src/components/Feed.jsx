@@ -20,7 +20,7 @@ const Feed = ({ onToggleSidebar, sidebarOpen }) => {
     try {
       setLoading(true);
       const res = await api.get("/posts");
-      setPosts(res.data);
+      setPosts(res.data.posts);
     } catch (err) {
       toast.error("Failed to load posts");
     } finally {
@@ -40,14 +40,6 @@ const Feed = ({ onToggleSidebar, sidebarOpen }) => {
   const handlePostUpdated = (updatedPost) => {
     setPosts(posts.map((p) => (p.id === updatedPost.id ? updatedPost : p)));
   };
-
-  if (loading) {
-    return (
-      <div className="feed">
-        <div className="loading">Loading posts...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="feed">
@@ -75,7 +67,6 @@ const Feed = ({ onToggleSidebar, sidebarOpen }) => {
       </div>
 
       <div className="feed-content">
-        {/* Create Post Button / Form */}
         {!showCreateForm ? (
           <div className="post-input-area">
             <div className="avatar-circle">
@@ -96,22 +87,26 @@ const Feed = ({ onToggleSidebar, sidebarOpen }) => {
         )}
 
         {/* Posts List */}
-        <div className="posts-list">
-          {posts.length > 0 ? (
-            posts.map((post) => (
-              <Post
-                key={post.id}
-                post={post}
-                onPostDeleted={handlePostDeleted}
-                onPostUpdated={handlePostUpdated}
-              />
-            ))
-          ) : (
-            <div className="empty-state">
-              <p>No posts yet. Be the first to share!</p>
-            </div>
-          )}
-        </div>
+        {loading ? (
+          <div className="loading">Loading posts...</div>
+        ) : (
+          <div className="posts-list">
+            {posts.length > 0 ? (
+              posts.map((post) => (
+                <Post
+                  key={post.id}
+                  post={post}
+                  onPostDeleted={handlePostDeleted}
+                  onPostUpdated={handlePostUpdated}
+                />
+              ))
+            ) : (
+              <div className="empty-state">
+                <p>No posts yet. Be the first to share!</p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

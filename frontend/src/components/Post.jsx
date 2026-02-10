@@ -17,15 +17,49 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
   const canEdit = user?.id === post.authorId;
 
   const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this post?")) {
-      try {
-        await api.delete(`/posts/${post.id}`);
-        toast.success("Post deleted");
-        onPostDeleted(post.id);
-      } catch (err) {
-        toast.error("Failed to delete post");
-      }
-    }
+    let confirmId = null;
+    confirmId = toast(
+      (t) => (
+        <div style={{ padding: 8 }}>
+          <div style={{ marginBottom: 8 }}>
+            Are you sure you want to delete this post?
+          </div>
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              style={{ padding: "6px 10px", borderRadius: 6 }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={async () => {
+                // close the confirm toast
+                toast.dismiss(t.id);
+                // show loading toast
+                const loadingId = toast.loading("Deleting post...");
+                try {
+                  await api.delete(`/posts/${post.id}`);
+                  toast.success("Post deleted", { id: loadingId });
+                  onPostDeleted(post.id);
+                } catch (err) {
+                  toast.error("Failed to delete post", { id: loadingId });
+                }
+              }}
+              style={{
+                padding: "6px 10px",
+                borderRadius: 6,
+                background: "#dc3545",
+                color: "white",
+                border: "none",
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity },
+    );
   };
 
   const handleEdit = async () => {
