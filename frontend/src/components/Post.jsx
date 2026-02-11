@@ -8,8 +8,10 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
   const { user } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(post.content);
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
+  const [liked, setLiked] = useState(
+    post.likes.some((like) => like.userId === user.id),
+  );
+  const [likeCount, setLikeCount] = useState(post.likes.length);
   const [comments, setComments] = useState(post.comments || []);
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
@@ -73,13 +75,26 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
   };
 
   const handleLike = async () => {
-    try {
-      await api.post("/likes", { postId: post.id });
+    if (!liked && likeCount >= 0) {
       setLiked(true);
-      setLikeCount(likeCount + 1);
-      toast.success("Post liked!");
-    } catch (err) {
-      toast.error("Failed to like post");
+      setLikeCount((prev) => prev + 1);
+      try {
+        await api.post("/likes/" + post.id);
+      } catch (err) {
+        toast.error("Failed to like post");
+        setLiked(false);
+        setLikeCount(likeCount - 1);
+      }
+    } else {
+      setLiked(false);
+      setLikeCount(likeCount - 1);
+      try {
+        await api.delete("/likes/" + post.id);
+      } catch (err) {
+        toast.error("Failed to unlike post");
+        setLiked(true);
+        setLikeCount((prev) => prev + 1);
+      }
     }
   };
 
@@ -151,13 +166,15 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
 
       <div className="post-actions-footer">
         <button onClick={handleLike} className="action-btn">
-          {liked ? "❤️" : "🤍"} Like
+          <span> {liked ? "❤️" : "🤍"}</span>
+          <span>{likeCount > 0 && likeCount}</span>
         </button>
+
         <button
           onClick={() => setShowComments(!showComments)}
           className="action-btn"
         >
-          💬 Comment
+          💬
         </button>
       </div>
 

@@ -2,7 +2,7 @@ const { prisma } = require("../config/prisma");
 
 const likePost = async (req, res) => {
   try {
-    const { postId } = req.body;
+    const { postId } = req.params;
     const userId = req.user.id;
 
     if (!postId) {
@@ -68,7 +68,7 @@ const likePost = async (req, res) => {
 
 const unlikePost = async (req, res) => {
   try {
-    const { postId } = req.body;
+    const { postId } = req.params;
     const userId = req.user.id;
 
     if (!postId) {

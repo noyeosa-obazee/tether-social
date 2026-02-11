@@ -8,8 +8,8 @@ const {
   checkIfLiked,
 } = require("../controllers/likeController");
 
-router.post("/", authenticateJWT, likePost);
-router.delete("/", authenticateJWT, unlikePost);
+router.post("/:postId", authenticateJWT, likePost);
+router.delete("/:postId", authenticateJWT, unlikePost);
 router.get("/post/:postId", getPostLikes);
 router.get("/post/:postId/check", authenticateJWT, checkIfLiked);
 
