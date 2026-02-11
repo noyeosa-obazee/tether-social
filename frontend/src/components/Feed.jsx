@@ -86,7 +86,6 @@ const Feed = ({ onToggleSidebar, sidebarOpen }) => {
           />
         )}
 
-        {/* Posts List */}
         {loading ? (
           <div className="loading">Loading posts...</div>
         ) : (

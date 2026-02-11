@@ -33,9 +33,8 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
             </button>
             <button
               onClick={async () => {
-                // close the confirm toast
                 toast.dismiss(t.id);
-                // show loading toast
+
                 const loadingId = toast.loading("Deleting post...");
                 try {
                   await api.delete(`/posts/${post.id}`);
@@ -103,7 +102,6 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
 
   return (
     <div className="post-card">
-      {/* Post Header */}
       <div className="post-header">
         <div className="post-author">
           <div className="avatar-circle">
@@ -131,7 +129,6 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
         )}
       </div>
 
-      {/* Post Content */}
       {isEditing ? (
         <div className="post-edit">
           <textarea
@@ -152,7 +149,6 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
         </>
       )}
 
-      {/* Post Actions */}
       <div className="post-actions-footer">
         <button onClick={handleLike} className="action-btn">
           {liked ? "❤️" : "🤍"} Like
@@ -165,7 +161,6 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
         </button>
       </div>
 
-      {/* Comments Section */}
       {showComments && (
         <div className="comments-section">
           <div className="new-comment">
