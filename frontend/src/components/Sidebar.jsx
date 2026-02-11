@@ -72,24 +72,22 @@ const Sidebar = ({
 
   return (
     <div className="sidebar">
-      {/* Sidebar Header with Toggle Arrow */}
       <div className="sidebar-top">
         <div className="sidebar-title">
           <h1>Tether</h1>
         </div>
-        {window.innerWidth <= 768 && (
+        {/* {window.innerWidth <= 768 && (
           <button
             className="sidebar-toggle-btn"
             onClick={onClose}
             aria-label="Close sidebar"
             title="Close menu"
           >
-            →
+            ←
           </button>
-        )}
+        )} */}
       </div>
 
-      {/* User Profile Header */}
       <div className="sidebar-header">
         <div className="user-profile">
           {user?.avatarUrl ? (
