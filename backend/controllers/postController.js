@@ -25,8 +25,22 @@ const createPost = async (req, res) => {
             avatarUrl: true,
           },
         },
-        comments: true,
-        likes: true,
+        comments: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                username: true,
+                avatarUrl: true,
+              },
+            },
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
       },
     });
 
@@ -190,8 +204,22 @@ const getUserPosts = async (req, res) => {
             avatarUrl: true,
           },
         },
-        comments: true,
-        likes: true,
+        comments: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                username: true,
+                avatarUrl: true,
+              },
+            },
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
       },
     });
 
@@ -254,8 +282,22 @@ const updatePost = async (req, res) => {
             avatarUrl: true,
           },
         },
-        comments: true,
-        likes: true,
+        comments: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                username: true,
+                avatarUrl: true,
+              },
+            },
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
       },
     });
 

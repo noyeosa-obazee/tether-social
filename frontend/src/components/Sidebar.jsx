@@ -3,6 +3,7 @@ import { ClipLoader } from "react-spinners";
 import { AuthContext } from "../context/AuthContext";
 import api from "../api/axios";
 import toast from "react-hot-toast";
+import UserSearch from "./UserSearch";
 import "./Sidebar.css";
 
 const Sidebar = ({
@@ -119,7 +120,6 @@ const Sidebar = ({
         </div>
       </div>
 
-      {/* Tab Navigation */}
       <div className="sidebar-tabs">
         <button
           className={`tab-btn ${activeTab === "feed" ? "active" : ""}`}
@@ -141,9 +141,11 @@ const Sidebar = ({
         </button>
       </div>
 
-      {/* Feed Tab Content */}
       {activeTab === "feed" && (
         <div className="sidebar-content">
+          <div className="sidebar-search">
+            <UserSearch />
+          </div>
           <div className="sidebar-info">
             <h3>Welcome to Tether</h3>
             <p>Share posts, comment, like, and chat with friends!</p>
@@ -151,7 +153,6 @@ const Sidebar = ({
         </div>
       )}
 
-      {/* Chat Tab Content */}
       {activeTab === "chat" && (
         <>
           <div className="sidebar-search">

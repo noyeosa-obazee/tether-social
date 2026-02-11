@@ -19,4 +19,18 @@ const authenticateJWT = (req, res, next) => {
   })(req, res, next);
 };
 
-module.exports = { authenticate, authenticateJWT };
+const optionalAuthenticateJWT = (req, res, next) => {
+  passport.authenticate("jwt", { session: false }, (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ error: "Authentication error" });
+    }
+
+    if (user) {
+      req.user = user;
+    }
+
+    next();
+  })(req, res, next);
+};
+
+module.exports = { authenticate, authenticateJWT, optionalAuthenticateJWT };
