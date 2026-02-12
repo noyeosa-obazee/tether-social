@@ -48,7 +48,8 @@ const Sidebar = ({
       setLoading(true);
       try {
         const res = await api.get(`/users?search=${term}`);
-        setSearchResults(res.data);
+
+        setSearchResults(res.data.users);
       } catch (err) {
         toast.error("Failed to search");
       } finally {

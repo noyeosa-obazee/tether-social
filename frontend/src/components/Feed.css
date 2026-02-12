@@ -111,6 +111,11 @@
   gap: 15px;
 }
 
+.posts-list > * {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .empty-state {
   background: white;
   padding: 40px 20px;

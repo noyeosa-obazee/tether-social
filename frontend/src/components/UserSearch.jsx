@@ -86,11 +86,17 @@ const UserSearch = () => {
                   onClick={() => handleUserClick(user.id)}
                   className="user-item"
                 >
-                  <img
-                    src={user.avatarUrl || "https://via.placeholder.com/40"}
-                    alt={user.username}
-                    className="user-avatar"
-                  />
+                  {user.avatarUrl ? (
+                    <img
+                      src={user.avatarUrl || "https://via.placeholder.com/40"}
+                      alt={user.username}
+                      className="user-avatar"
+                    />
+                  ) : (
+                    <div className="avatar-circle">
+                      {user?.username?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <div className="user-info">
                     <div className="user-name">{user.username}</div>
                     <div className="user-stats">

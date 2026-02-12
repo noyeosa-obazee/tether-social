@@ -148,9 +148,20 @@ const getAllUsers = async (req, res) => {
 
     const usersWithStats = await Promise.all(
       users.map(async (user) => {
-        const followersCount = await prisma.follow.count({
-          where: { followingId: user.id },
-        });
+        let followersCount = 0;
+        try {
+          followersCount = await prisma.follow.count({
+            where: { followingId: user.id },
+          });
+        } catch (err) {
+          console.error(
+            `Failed to fetch followers for user ${user.id}:`,
+            err.message || err,
+          );
+          // fallback to 0 followers on DB/auth errors so search still returns results
+          followersCount = 0;
+        }
+
         return {
           ...user,
           postsCount: user.posts.length,
