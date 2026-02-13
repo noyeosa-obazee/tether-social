@@ -1,4 +1,5 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Sidebar from "../components/Sidebar";
 import Feed from "../components/Feed";
@@ -8,8 +9,16 @@ import "./Dashboard.css";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("feed");
   const [selectedChat, setSelectedChat] = useState(null);
+
+  useEffect(() => {
+    if (location.state?.activeTab && location.state?.selectedChat) {
+      setActiveTab(location.state.activeTab);
+      setSelectedChat(location.state.selectedChat);
+    }
+  }, [location.state]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 768);
   const [showProfileModal, setShowProfileModal] = useState(false);
 

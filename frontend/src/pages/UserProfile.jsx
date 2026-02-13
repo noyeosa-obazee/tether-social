@@ -17,6 +17,7 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [postsLoading, setPostsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [messageLoading, setMessageLoading] = useState(false);
 
   useEffect(() => {
     fetchUserData();
@@ -75,6 +76,27 @@ const UserProfile = () => {
       }));
     } catch (err) {
       console.error("Error unfollowing user:", err);
+    }
+  };
+
+  const handleMessage = async () => {
+    try {
+      setMessageLoading(true);
+      const response = await api.post("/conversations", {
+        participantId: userId,
+      });
+      const conversation = response.data;
+
+      navigate("/dashboard", {
+        state: {
+          activeTab: "chat",
+          selectedChat: conversation,
+        },
+      });
+    } catch (err) {
+      console.error("Error creating conversation:", err);
+    } finally {
+      setMessageLoading(false);
     }
   };
 
@@ -154,7 +176,13 @@ const UserProfile = () => {
                   Follow
                 </button>
               )}
-              <button className="message-btn">Message</button>
+              <button
+                className="message-btn"
+                onClick={handleMessage}
+                disabled={messageLoading}
+              >
+                {messageLoading ? "Loading..." : "Message"}
+              </button>
             </div>
           )}
         </div>
