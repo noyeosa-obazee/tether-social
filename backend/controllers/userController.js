@@ -193,8 +193,9 @@ const getAllUsers = async (req, res) => {
 const updateUserProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, bio, avatarUrl, email } = req.body;
+    const { username, bio, email } = req.body;
     const userId = req.user.id;
+    const newAvatarUrl = req.file ? req.file.path : null;
 
     if (id !== userId) {
       return res.status(403).json({
@@ -252,8 +253,8 @@ const updateUserProfile = async (req, res) => {
       updateData.bio = bio;
     }
 
-    if (avatarUrl !== undefined) {
-      updateData.avatarUrl = avatarUrl;
+    if (newAvatarUrl !== null) {
+      updateData.avatarUrl = newAvatarUrl;
     }
 
     const updatedUser = await prisma.user.update({

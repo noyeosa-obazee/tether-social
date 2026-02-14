@@ -2,8 +2,9 @@ const { prisma } = require("../config/prisma");
 
 const createPost = async (req, res) => {
   try {
-    const { content, imageUrl } = req.body;
+    const { content } = req.body;
     const authorId = req.user.id;
+    const imageUrl = req.file ? req.file.path : null;
 
     if (!content && !imageUrl) {
       return res.status(400).json({
@@ -249,8 +250,9 @@ const getUserPosts = async (req, res) => {
 const updatePost = async (req, res) => {
   try {
     const { id } = req.params;
-    const { content, imageUrl } = req.body;
+    const { content } = req.body;
     const userId = req.user.id;
+    const newImageUrl = req.file ? req.file.path : null;
 
     const post = await prisma.post.findUnique({
       where: { id },
@@ -268,11 +270,13 @@ const updatePost = async (req, res) => {
       });
     }
 
+    // If a new image was uploaded, we should delete the old one from Cloudinary
+    // This is a simplified approach - in production, you might want to handle this more carefully
     const updatedPost = await prisma.post.update({
       where: { id },
       data: {
         content: content !== undefined ? content : post.content,
-        imageUrl: imageUrl !== undefined ? imageUrl : post.imageUrl,
+        imageUrl: newImageUrl !== null ? newImageUrl : post.imageUrl,
       },
       include: {
         author: {

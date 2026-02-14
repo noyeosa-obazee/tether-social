@@ -4,6 +4,7 @@ const {
   authenticateJWT,
   optionalAuthenticateJWT,
 } = require("../middleware/auth");
+const upload = require("../middleware/upload");
 const {
   getUserById,
   getAllUsers,
@@ -28,7 +29,7 @@ router.get("/:id/is-following", authenticateJWT, isFollowing);
 
 // Generic user routes
 router.get("/:id", optionalAuthenticateJWT, getUserById);
-router.put("/:id", authenticateJWT, updateUserProfile);
+router.put("/:id", authenticateJWT, upload.single("avatar"), updateUserProfile);
 router.delete("/:id", authenticateJWT, deleteUser);
 router.post("/:id/change-password", authenticateJWT, changePassword);
 router.post("/:id/follow", authenticateJWT, followUser);

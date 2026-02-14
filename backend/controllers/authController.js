@@ -8,6 +8,7 @@ const {
 const register = async (req, res) => {
   try {
     const { username, email, password, confirmPassword } = req.body;
+    const avatarUrl = req.file ? req.file.path : null;
 
     if (!username || !email || !password) {
       return res.status(400).json({
@@ -46,11 +47,13 @@ const register = async (req, res) => {
         username,
         email,
         password: hashedPassword,
+        avatarUrl: avatarUrl || null,
       },
       select: {
         id: true,
         username: true,
         email: true,
+        avatarUrl: true,
       },
     });
     const token = generateToken(user);

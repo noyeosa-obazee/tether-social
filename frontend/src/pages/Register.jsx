@@ -12,6 +12,7 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+  const [avatarFile, setAvatarFile] = useState(null);
 
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -29,13 +30,51 @@ const Register = () => {
       return;
     }
 
-    const result = await register(formData);
+    // Create FormData for file upload
+    const formDataWithFile = new FormData();
+    formDataWithFile.append("username", formData.username);
+    formDataWithFile.append("email", formData.email);
+    formDataWithFile.append("password", formData.password);
+    formDataWithFile.append("confirmPassword", formData.confirmPassword);
+    if (avatarFile) {
+      formDataWithFile.append("avatar", avatarFile);
+    }
 
-    if (result.success) {
-      toast.success("Account created successfully", { id: toastId });
-      navigate("/login");
-    } else {
-      toast.error(result.message || "Registration failed", { id: toastId });
+    try {
+      const response = await api.post("/auth/register", formDataWithFile, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data) {
+        // Store token and user data
+        localStorage.setItem("token", response.data.token);
+        toast.success("Account created successfully", { id: toastId });
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.error || "Registration failed";
+      toast.error(errorMessage, { id: toastId });
+    }
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file");
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image file size must be less than 5MB");
+        return;
+      }
+
+      setAvatarFile(file);
     }
   };
 
@@ -105,6 +144,28 @@ const Register = () => {
               onChange={handleChange}
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label>Profile Picture (optional)</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className="form-input"
+            />
+            {avatarFile && (
+              <div className="image-preview">
+                <span>Selected: {avatarFile.name}</span>
+                <button
+                  type="button"
+                  onClick={() => setAvatarFile(null)}
+                  className="btn-remove"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
           </div>
 
           <button type="submit" className="btn-primary">

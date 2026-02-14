@@ -7,11 +7,11 @@ import "./EditProfileModal.css";
 const EditProfileModal = ({ onClose }) => {
   const { user, updateUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [avatarFile, setAvatarFile] = useState(null);
 
   const [formData, setFormData] = useState({
     username: user.username || "",
     bio: user.bio || "",
-    avatarUrl: user.avatarUrl || "",
   });
 
   const handleChange = (e) => {
@@ -23,7 +23,19 @@ const EditProfileModal = ({ onClose }) => {
     setLoading(true);
 
     try {
-      const res = await api.put(`/users/${user.id}`, formData);
+      // Create FormData for file upload
+      const formDataWithFile = new FormData();
+      formDataWithFile.append("username", formData.username);
+      formDataWithFile.append("bio", formData.bio);
+      if (avatarFile) {
+        formDataWithFile.append("avatar", avatarFile);
+      }
+
+      const res = await api.put(`/users/${user.id}`, formDataWithFile, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       updateUser(res.data);
 
@@ -33,6 +45,25 @@ const EditProfileModal = ({ onClose }) => {
       toast.error(err.response?.data?.error || "Failed to update profile");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file");
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image file size must be less than 5MB");
+        return;
+      }
+
+      setAvatarFile(file);
     }
   };
 
@@ -70,14 +101,25 @@ const EditProfileModal = ({ onClose }) => {
           </div>
 
           <div className="form-group">
-            <label>Avatar URL</label>
+            <label>Profile Picture</label>
             <input
-              type="url"
-              name="avatarUrl"
-              value={formData.avatarUrl}
-              onChange={handleChange}
-              placeholder="Profile picture URL"
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className="form-input"
             />
+            {avatarFile && (
+              <div className="image-preview">
+                <span>Selected: {avatarFile.name}</span>
+                <button
+                  type="button"
+                  onClick={() => setAvatarFile(null)}
+                  className="btn-remove"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="modal-actions">
