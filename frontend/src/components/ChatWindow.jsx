@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
@@ -7,12 +8,17 @@ import "./ChatWindow.css";
 
 const ChatWindow = ({ chat, onBack, onToggleSidebar, sidebarOpen }) => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef(null);
 
   const friend = chat?.participants?.find((p) => p.id !== user.id);
+
+  const handleAvatarClick = () => {
+    navigate(`/user/${friend.id}`);
+  };
 
   useEffect(() => {
     if (chat?.id) {
@@ -87,7 +93,13 @@ const ChatWindow = ({ chat, onBack, onToggleSidebar, sidebarOpen }) => {
           </button>
           <div
             className="avatar-circle"
-            style={{ width: "35px", height: "35px", fontSize: "1rem" }}
+            style={{
+              width: "35px",
+              height: "35px",
+              fontSize: "1rem",
+              cursor: "pointer",
+            }}
+            onClick={handleAvatarClick}
           >
             {(friend?.username || "?").charAt(0).toUpperCase()}
           </div>

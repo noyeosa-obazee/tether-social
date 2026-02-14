@@ -19,6 +19,10 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [messageLoading, setMessageLoading] = useState(false);
 
+  const handleAvatarClick = () => {
+    navigate(`/user/${user.id}`);
+  };
+
   useEffect(() => {
     fetchUserData();
   }, [userId]);
@@ -138,9 +142,15 @@ const UserProfile = () => {
               src={user.avatarUrl || "https://via.placeholder.com/150"}
               alt={user.username}
               className="profile-avatar"
+              style={{ cursor: "pointer" }}
+              onClick={handleAvatarClick}
             />
           ) : (
-            <div className="avatar-circle">
+            <div
+              className="avatar-circle"
+              onClick={handleAvatarClick}
+              style={{ cursor: "pointer" }}
+            >
               {user?.username?.charAt(0).toUpperCase()}
             </div>
           )}

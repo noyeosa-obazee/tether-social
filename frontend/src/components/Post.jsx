@@ -1,11 +1,13 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 import "./Post.css";
 
 const Post = ({ post, onPostDeleted, onPostUpdated }) => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(post.content);
   const [liked, setLiked] = useState(
@@ -15,6 +17,10 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
   const [comments, setComments] = useState(post.comments || []);
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
+
+  const handleAvatarClick = () => {
+    navigate(`/user/${post.authorId}`);
+  };
 
   const canEdit = user?.id === post.authorId;
 
@@ -119,7 +125,11 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
     <div className="post-card">
       <div className="post-header">
         <div className="post-author">
-          <div className="avatar-circle">
+          <div
+            className="avatar-circle"
+            onClick={handleAvatarClick}
+            style={{ cursor: "pointer" }}
+          >
             {post.author?.username?.charAt(0).toUpperCase()}
           </div>
           <div>

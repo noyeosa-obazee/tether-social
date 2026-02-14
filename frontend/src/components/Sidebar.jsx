@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { ClipLoader } from "react-spinners";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 import UserSearch from "./UserSearch";
@@ -15,10 +16,15 @@ const Sidebar = ({
   onOpenProfileModal,
 }) => {
   const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [conversations, setConversations] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleAvatarClick = () => {
+    navigate(`/user/${user.id}`);
+  };
 
   useEffect(() => {
     if (activeTab === "chat") {
@@ -97,10 +103,15 @@ const Sidebar = ({
               src={user.avatarUrl}
               alt="Avatar"
               className="avatar-circle"
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: "cover", cursor: "pointer" }}
+              onClick={handleAvatarClick}
             />
           ) : (
-            <div className="avatar-circle">
+            <div
+              className="avatar-circle"
+              onClick={handleAvatarClick}
+              style={{ cursor: "pointer" }}
+            >
               {user?.username?.charAt(0).toUpperCase()}
             </div>
           )}

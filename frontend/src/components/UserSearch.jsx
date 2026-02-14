@@ -91,9 +91,21 @@ const UserSearch = () => {
                       src={user.avatarUrl || "https://via.placeholder.com/40"}
                       alt={user.username}
                       className="user-avatar"
+                      style={{ cursor: "pointer" }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleUserClick(user.id);
+                      }}
                     />
                   ) : (
-                    <div className="avatar-circle">
+                    <div
+                      className="avatar-circle"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleUserClick(user.id);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
                       {user?.username?.charAt(0).toUpperCase()}
                     </div>
                   )}

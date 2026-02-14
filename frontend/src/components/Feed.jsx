@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 import Post from "./Post";
@@ -8,9 +9,14 @@ import "./Feed.css";
 
 const Feed = ({ onToggleSidebar, sidebarOpen }) => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
+
+  const handleAvatarClick = () => {
+    navigate(`/user/${user.id}`);
+  };
 
   useEffect(() => {
     fetchPosts();
@@ -69,7 +75,11 @@ const Feed = ({ onToggleSidebar, sidebarOpen }) => {
       <div className="feed-content">
         {!showCreateForm ? (
           <div className="post-input-area">
-            <div className="avatar-circle">
+            <div
+              className="avatar-circle"
+              onClick={handleAvatarClick}
+              style={{ cursor: "pointer" }}
+            >
               {user?.username?.charAt(0).toUpperCase()}
             </div>
             <button
