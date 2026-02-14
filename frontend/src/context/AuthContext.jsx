@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
       setUser(res.data.user);
+      console.log(res.data.user);
       return { success: true };
     } catch (error) {
       return {
@@ -43,6 +44,13 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const res = await api.post("/auth/register", userData);
+
+      // Store token and user data after successful registration
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      setUser(res.data.user);
+      console.log(res.data.user);
       return { success: true, message: res.data.message };
     } catch (error) {
       return {

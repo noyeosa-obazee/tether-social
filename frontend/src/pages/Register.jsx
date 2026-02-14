@@ -41,17 +41,13 @@ const Register = () => {
     }
 
     try {
-      const response = await api.post("/auth/register", formDataWithFile, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const result = await register(formDataWithFile);
 
-      if (response.data) {
-        // Store token and user data
-        localStorage.setItem("token", response.data.token);
+      if (result.success) {
         toast.success("Account created successfully", { id: toastId });
         navigate("/dashboard");
+      } else {
+        toast.error(result.message || "Registration failed", { id: toastId });
       }
     } catch (err) {
       const errorMessage = err.response?.data?.error || "Registration failed";
