@@ -11,9 +11,9 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(post.content);
   const [liked, setLiked] = useState(
-    post.likes.some((like) => like.userId === user.id),
+    post.likes?.some((like) => like.userId === user.id) || false,
   );
-  const [likeCount, setLikeCount] = useState(post.likes.length);
+  const [likeCount, setLikeCount] = useState(post.likes?.length || 0);
   const [comments, setComments] = useState(post.comments || []);
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
