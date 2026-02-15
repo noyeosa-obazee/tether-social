@@ -53,12 +53,40 @@ const Dashboard = () => {
         {activeTab === "feed" ? (
           <Feed onToggleSidebar={toggleSidebar} sidebarOpen={isSidebarOpen} />
         ) : (
-          <ChatWindow
-            chat={selectedChat}
-            onBack={() => setSelectedChat(null)}
-            onToggleSidebar={toggleSidebar}
-            sidebarOpen={isSidebarOpen}
-          />
+          <div className="chat-container">
+            {selectedChat ? (
+              <ChatWindow
+                chat={selectedChat}
+                onBack={() => setSelectedChat(null)}
+                onToggleSidebar={toggleSidebar}
+                sidebarOpen={isSidebarOpen}
+              />
+            ) : (
+              <div className="empty-chat-state">
+                <div className="empty-chat-content">
+                  <h2>Start a Conversation</h2>
+                  <p>Find friends and start chatting!</p>
+                  <div className="empty-chat-actions">
+                    <button
+                      onClick={() => setActiveTab("feed")}
+                      className="btn-primary"
+                    >
+                      Explore Feed
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveTab("chat");
+                        setIsSidebarOpen(true);
+                      }}
+                      className="btn-secondary"
+                    >
+                      Search Users
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </div>
 

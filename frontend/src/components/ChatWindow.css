@@ -182,4 +182,8 @@
     padding: 6px 12px;
     font-size: 0.8rem;
   }
+
+  .back-button {
+    display: none;
+  }
 }
