@@ -17,6 +17,7 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
   const [comments, setComments] = useState(post.comments || []);
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleAvatarClick = () => {
     navigate(`/user/${post.authorId}`);
@@ -106,6 +107,7 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
 
   const handleAddComment = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (!newComment.trim()) return;
 
     try {
@@ -113,11 +115,16 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
         postId: post.id,
         content: newComment,
       });
-      setComments([...comments, res.data]);
-      setNewComment("");
+      if (res.data) {
+        setComments([...comments, res.data.comment]);
+
+        setNewComment("");
+      }
       toast.success("Comment added");
     } catch (err) {
       toast.error("Failed to add comment");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -200,7 +207,7 @@ const Post = ({ post, onPostDeleted, onPostUpdated }) => {
                 className="comment-input"
               />
               <button type="submit" className="btn-primary">
-                Post
+                {loading ? "Posting..." : "Post"}
               </button>
             </form>
           </div>

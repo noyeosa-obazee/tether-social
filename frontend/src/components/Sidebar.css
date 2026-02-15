@@ -144,7 +144,7 @@
 
 .sidebar-search {
   padding: 15px;
-  border-bottom: 1px solid #eee;
+  /* border-bottom: 1px solid #eee; */
 }
 
 .search-input {
